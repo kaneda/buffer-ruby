@@ -38,18 +38,36 @@ class BufferClient
   def get_auth_token
     token = @auth_api.get_auth_token
     if @auth_api.has_error?
+      @error = @auth_api.get_error
+    end
 
+    token
   end
 
   def get_user_id
-    @user_api.get_user_id
+    user_id = @user_api.get_user_id
+    if @user_api.has_error?
+      @error = @user_api.get_error
+    end
+
+    user_id
   end
 
   def get_user_json
-    @profile_api.get_user_json
+    user_json = @user_api.get_user_json
+    if @user_api.has_error?
+      @error = @user_api.get_error
+    end
+
+    user_json
   end
 
   def get_user_profiles
-    ProfileApi.get_profiles
+    profiles = @profile_api.get_profiles
+    if @profile_api.has_error?
+      @error = @profile_api.get_error
+    end
+
+    profiles
   end
 end
