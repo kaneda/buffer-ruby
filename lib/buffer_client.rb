@@ -4,6 +4,7 @@ require_relative "api/user_api.rb"
 require_relative "api/profile_api.rb"
 require_relative "api/update_api.rb"
 require_relative "api/link_api.rb"
+require_relative "api/info_api.rb"
 
 class BufferClient
   def initialize(options = {})
@@ -15,15 +16,21 @@ class BufferClient
     @profile_api = ProfileApi.new(options)
     @update_api  = UpdateApi.new(options)
     @link_api    = LinkApi.new(options)
+    @info_api    = InfoApi.new(options)
 
     @api_objects = [
       @auth_api,
       @user_api,
       @profile_api,
       @update_api,
-      @link_api
+      @link_api,
+      @info_api
     ]
   end
+
+  ##################
+  # HELPER METHODS #
+  ##################
 
   # Reconfigure API objects
   def configure(options = {})
@@ -46,12 +53,20 @@ class BufferClient
     @error
   end
 
+  ############
+  # AUTH API #
+  ############
+
   def get_auth_token
     token = @auth_api.get_auth_token
     record_err(@auth_api)
 
     token
   end
+
+  ############
+  # USER API #
+  ############
 
   def get_user_id
     user_id = @user_api.get_user_id
@@ -66,6 +81,10 @@ class BufferClient
 
     user_json
   end
+
+  ###############
+  # PROFILE API #
+  ###############
 
   def get_user_profiles
     profiles = @profile_api.get_profiles
@@ -94,6 +113,10 @@ class BufferClient
 
     is_success?(success_json)
   end
+
+  ##############
+  # UPDATE API #
+  ##############
 
   def get_update(id)
     update_json = @update_api.get_update(id)
@@ -171,6 +194,10 @@ class BufferClient
     is_success?(success_json)
   end
 
+  ############
+  # LINK API #
+  ############
+
   def get_shares(url)
     # Encode URL
     encoded_url = CGI.escape(url)
@@ -182,7 +209,19 @@ class BufferClient
     end
   end
 
+  ############
+  # INFO API #
+  ############
+
+  def get_configuration
+    info_json = @info_api.get_configuration
+    record_err(@info_api)
+
+    info_json
+  end
+
   private
+
   def is_success?(success_json)
     success_json.present? && success_json.include?("success") && success_json["success"] == true
   end

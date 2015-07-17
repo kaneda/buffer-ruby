@@ -10,13 +10,13 @@ Modelled after Octokit <3. This is a lightweight client for the Buffer API (http
 * https://buffer.com/developers/api/oauth
 * https://buffer.com/developers/api/user
 * https://buffer.com/developers/api/profiles
+* https://buffer.com/developers/api/updates
 * https://buffer.com/developers/api/links
+* https://buffer.com/developers/api/info
 * https://buffer.com/developers/api/errors
 
 
 ### What's Missing?
-* https://buffer.com/developers/api/updates (WIP)
-* https://buffer.com/developers/api/info
 * Rspecs
 
 ### Installing
@@ -76,6 +76,7 @@ buffer_client.configure({
 | destroy_update | Social Media Post ID| Permanently destroy an update | |
 | move_to_top | Social Media Post ID| Move post to top of queue | |
 | get_shares | URL (unencoded) | Gets the number of shares for a given URL through Buffer | You can pass a normal URL here, the client will encode it. This is one of the only calls to not require an auth_token |
+| get_configuration | | Gets the current Buffer config | |
 
 ### Helper methods
 | Method | Description |
