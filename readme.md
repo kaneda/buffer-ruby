@@ -16,6 +16,16 @@ Modelled after Octokit <3. This is a lightweight client for the Buffer API (http
 * https://buffer.com/developers/api/links
 * https://buffer.com/developers/api/info
 
+### Gemfile
+
+Put this sucker in your Gemfile and bundle install
+
+```ruby
+gem "buffer-app", :git => "git://github.com/kaneda/buffer-ruby", :ref => "cd461c8a9f934c9a499e7bfe80f93d22e0f6481a"
+```
+
+Apologies for the SHA, I'll add a tag shortly
+
 ### Basic Usage
 
 You can define the client up front or configure it later. The options array the BufferClient (and the API objects behind the scenes) uses takes in the following parameters:
