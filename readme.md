@@ -58,5 +58,7 @@ To contribute simply:
 ## Contact
 
 Email: kanedasan@gmail.com
+
 Twitter: @kanedasan
+
 IRC: kaneda^ on FreeNode (##hackers)
