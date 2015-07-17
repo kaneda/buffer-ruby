@@ -20,6 +20,9 @@ class AuthApi < BaseApi
     json_response = get_post_response(uri, post_data)
     if json_response.present?
       json_response["access_token"]
+    else
+      @error = "Failed to get JSON token, received: #{json_response}"
+      nil
     end
   end
 end
