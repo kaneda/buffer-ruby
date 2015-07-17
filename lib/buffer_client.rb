@@ -11,7 +11,7 @@ class BufferClient
     # Initialize the API objects we may use
     @auth_api    = AuthApi.new(options)
     @user_api    = UserApi.new(options)
-    @profile_api = ProflieApi.new(options)
+    @profile_api = ProfileApi.new(options)
   end
 
   def error
