@@ -12,6 +12,11 @@ module ApiHelpers
     end
   end
 
+  def build_url(path, auth_token = true)
+    url  = "#{API_URL}/#{API_VERSION}/#{path}"
+    url += "?access_token=#{@auth_token}" if auth_token
+  end
+
   def has_data?(response)
     response.present? && response.body.present?
   end

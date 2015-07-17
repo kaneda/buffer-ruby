@@ -11,8 +11,6 @@ class UserApi < BaseApi
 
   def get_user_json
     return nil unless verify_token
-
-    user_url = "#{API_URL}/#{API_VERSION}/#{USER_PATH}?access_token=#{@auth_token}"
-    get_get_response(user_url)
+    get_get_response( build_url(USER_PATH) )
   end
 end
