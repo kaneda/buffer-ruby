@@ -23,17 +23,17 @@ class UpdateApi < BaseApi
 
   def get_pending_updates(id, options = {})
     return nil unless verify_token
-    get_get_response( build_url("#{PROFILE_PATH}/#{id}/#{PENDING_PATH}", options) )
+    get_get_response( build_profile_url(id, PENDING_PATH, options) )
   end
 
   def get_sent_updates(id, options = {})
     return nil unless verify_token
-    get_get_response( build_url("#{PROFILE_PATH}/#{id}/#{SENT_PATH}", options) )
+    get_get_response( build_profile_url(id, SENT_PATH, options) )
   end
 
   def get_interactions(id, options = {})
     return nil unless verify_token
-    get_get_response( build_url("#{UPDATE_PATH}/#{id}/#{INTERACTIONS_PATH}", options) )
+    get_get_response( build_update_url(id, INTERACTIONS_PATH, options) )
   end
 
   def reorder_updates(id, updates_array, options = {})
@@ -41,14 +41,14 @@ class UpdateApi < BaseApi
     post_data  = "#{build_options_string(options)}&"
     post_data += updates_array.map { |u| "order[]=#{u}" }.join("&")
 
-    get_post_response( build_url("#{PROFILE_PATH}/#{id}/#{REORDER_PATH}"), post_data )
+    get_post_response( build_profile_url(id, REORDER_PATH), post_data )
   end
 
   def shuffle_updates(id, options = {})
     return nil unless verify_token
     post_data = build_options_string(options)
 
-    get_post_response( build_url("#{PROFILE_PATH}/#{id}/#{SHUFFLE_PATH}"), post_data )
+    get_post_response( build_profile_url(id, SHUFFLE_PATH), post_data )
   end
 
   def create_update(profile_ids, options = {})
@@ -63,21 +63,31 @@ class UpdateApi < BaseApi
     return nil unless verify_token
     post_data = build_options_string(options)
 
-    get_post_response( build_url("#{UPDATE_PATH}/#{id}/#{UPDATE_STATUS_PATH}"), post_data )
+    get_post_response( build_update_url(id, UPDATE_STATUS_PATH), post_data )
   end
 
   def share_update(id)
     return nil unless verify_token
-    get_post_response( build_url("#{UPDATE_PATH}/#{id}/#{SHARE_PATH}") )
+    get_post_response( build_update_url(id, SHARE_PATH) )
   end
 
   def destroy_update(id)
     return nil unless verify_token
-    get_post_response( build_url("#{UPDATE_PATH}/#{id}/#{DESTROY_PATH}") )
+    get_post_response( build_update_url(id, DESTROY_PATH) )
   end
 
   def move_to_top(id)
     return nil unless verify_token
-    get_post_response( build_url("#{UPDATE_PATH}/#{id}/#{MOVE_TOP_PATH}") )
+    get_post_response( build_update_url(id, MOVE_TOP_PATH) )
+  end
+
+  private
+
+  def build_update_url(id, path, options = {})
+    build_url("#{UPDATE_PATH}/#{id}/#{path}", options)
+  end
+
+  def build_profile_url(id, path, options = {})
+    build_url("#{PROFILE_PATH}/#{id}/#{path}", options)
   end
 end
