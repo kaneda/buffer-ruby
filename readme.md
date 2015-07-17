@@ -56,7 +56,7 @@ buffer_client.configure({
 
 ### Available Calls
 | Client call | Input | Description | Notes
-| :-----------: | :----- | :----------- | :-----
+| :---------: | :------ | :---- | :---------
 | get_auth_token | | Returns the user's long-lasting auth token | user_code must be defined in the buffer_client, as well as the ENV variables "BUFFER_KEY" and "BUFFER_SECRET" |
 | get_user_id | | Returns the user's Buffer ID | |
 | get_user_json | | Returns the entirety of the user JSON | |
