@@ -8,7 +8,7 @@ class AuthApi < BaseApi
   def get_auth_token
     return nil unless verify_user_code && verify_env_vars
 
-    oauth_url = build_url(OAUTH_PATH, false)
+    oauth_url = build_url(OAUTH_PATH, {}, false)
 
     post_data = "client_id=#{ENV['BUFFER_KEY']}&" +
       "client_secret=#{ENV['BUFFER_SECRET']}&" +

@@ -1,6 +1,9 @@
+require 'cgi'
 require_relative "api/auth_api.rb"
 require_relative "api/user_api.rb"
 require_relative "api/profile_api.rb"
+require_relative "api/update_api.rb"
+require_relative "api/link_api.rb"
 
 class BufferClient
   def initialize(options = {})
@@ -10,13 +13,23 @@ class BufferClient
     @auth_api    = AuthApi.new(options)
     @user_api    = UserApi.new(options)
     @profile_api = ProfileApi.new(options)
+    @update_api  = UpdateApi.new(options)
+    @link_api    = LinkApi.new(options)
+
+    @api_objects = [
+      @auth_api,
+      @user_api,
+      @profile_api,
+      @update_api,
+      @link_api
+    ]
   end
 
   # Reconfigure API objects
   def configure(options = {})
-    @auth_api.configure(options)
-    @user_api.configure(options)
-    @profile_api.configure(options)
+    @api_objects.each do |api|
+      api.configure(options)
+    end
   end
 
   def has_error?
@@ -35,37 +48,146 @@ class BufferClient
 
   def get_auth_token
     token = @auth_api.get_auth_token
-    if @auth_api.has_error?
-      @error = @auth_api.get_error
-    end
+    record_err(@auth_api)
 
     token
   end
 
   def get_user_id
     user_id = @user_api.get_user_id
-    if @user_api.has_error?
-      @error = @user_api.get_error
-    end
+    record_err(@user_api)
 
     user_id
   end
 
   def get_user_json
     user_json = @user_api.get_user_json
-    if @user_api.has_error?
-      @error = @user_api.get_error
-    end
+    record_err(@user_api)
 
     user_json
   end
 
   def get_user_profiles
     profiles = @profile_api.get_profiles
-    if @profile_api.has_error?
-      @error = @profile_api.get_error
-    end
+    record_err(@profile_api)
 
     profiles
+  end
+
+  def get_user_profile(id)
+    profile = @profile_api.get_profile(id)
+    record_err(@profile_api)
+
+    profile
+  end
+
+  def get_schedule(id)
+    schedule = @profile_api.get_schedule(id)
+    record_err(@profile_api)
+
+    schedule
+  end
+
+  def update_schedule(id, sched_array)
+    success_json = @profile_api.update_schedule(id, sched_array)
+    record_err(@profile_api)
+
+    is_success?(success_json)
+  end
+
+  def get_update(id)
+    update_json = @update_api.get_update(id)
+    record_err(@update_api)
+
+    update_json
+  end
+
+  def get_pending_updates(id, options = {})
+    pending_updates_json = @update_api.get_pending_updates(id, options)
+    record_err(@update_api)
+
+    pending_updates_json
+  end
+
+  def get_sent_updates(id, options = {})
+    sent_updates_json = @update_api.get_sent_updates(id, options)
+    record_err(@update_api)
+
+    sent_updates_json
+  end
+
+  def get_interactions(id, event, options = {})
+    # Forces the user to enter a value for event without
+    # needing to validate the hash
+    options[:event]   = event
+    interactions_json = @update_api.get_interactions(id, options)
+    record_err(@update_api)
+
+    interactions_json
+  end
+
+  def reorder_updates(id, updates_array, options = {})
+    new_order_json = @update_api.reorder_updates(id, updates_array, options)
+    record_err(@update_api)
+
+    new_order_json
+  end
+
+  def create_update(profile_ids, options = {})
+    post_json = @update_api.create_update(profile_ids, options)
+    record_err(@update_api)
+
+    post_json
+  end
+
+  def update_status(id, text, options = {})
+    # Forces the user to enter a value for text without
+    # needing to validate the hash
+    options[:text] = text
+    update_json = @update_api.update_status(id, options)
+    record_err(@update_api)
+
+    update_json
+  end
+
+  def share_update(id)
+    success_json = @update_api.share_update(id)
+    record_err(@update_api)
+
+    is_success?(success_json)
+  end
+
+  def destroy_update(id)
+    success_json = @update_api.destroy_update(id)
+    record_err(@update_api)
+
+    is_success?(success_json)
+  end
+
+  def move_to_top(id)
+    success_json = @update_api.move_to_top(id)
+    record_err(@update_api)
+
+    is_success?(success_json)
+  end
+
+  def get_shares(url)
+    # Encode URL
+    encoded_url = CGI.escape(url)
+    share_json = @link_api.get_shares(encoded_url)
+    record_err(@link_api)
+
+    if share_json.present? && share_json["shares"].present?
+      share_json["shares"]
+    end
+  end
+
+  private
+  def is_success?(success_json)
+    success_json.present? && success_json.include?("success") && success_json["success"] == true
+  end
+
+  def record_err(api)
+    @error = api.get_error if api.has_error?
   end
 end

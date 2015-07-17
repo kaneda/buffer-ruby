@@ -2,11 +2,9 @@ require 'active_support/all'
 require "net/http"
 require "uri"
 require_relative "helpers/api_helpers.rb"
-require_relative "../buffer_vars.rb"
 
 class BaseApi
   include ApiHelpers
-  include BufferVars
 
   def initialize(options = {})
     @user_code  = options[:user_code]
