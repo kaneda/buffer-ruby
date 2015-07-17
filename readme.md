@@ -24,7 +24,7 @@ Modelled after Octokit <3. This is a lightweight client for the Buffer API (http
 Put this sucker in your Gemfile and bundle install
 
 ```ruby
-gem "buffer-app", :git => "git://github.com/kaneda/buffer-ruby", :tag => "v1.0"
+gem "buffer-app", :git => "git://github.com/kaneda/buffer-ruby", :tag => "v1.1"
 ```
 
 Then drop this into your config/application.rb (or wherever you want to use it)
