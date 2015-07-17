@@ -5,7 +5,7 @@ class AuthApi < BaseApi
   # PATHS
   OAUTH_PATH = "oauth2/token.json"
 
-  def get_auth_code
+  def get_auth_token
     return nil unless verify_user_code && verify_env_vars
 
     oauth_url = "#{API_URL}/#{API_VERSION}/#{OAUTH_PATH}"
