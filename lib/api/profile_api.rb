@@ -8,7 +8,7 @@ class ProfileApi < BaseApi
   def get_profiles
     return nil unless verify_token
 
-    profile_url = "#{API_URL}/#{API_VERSION}/#{PROFILES_PATH}?access_token=#{@auth_code}"
+    profile_url = "#{API_URL}/#{API_VERSION}/#{PROFILES_PATH}?access_token=#{@auth_token}"
     uri = URI.parse(profile_url)
 
     get_get_response(uri)

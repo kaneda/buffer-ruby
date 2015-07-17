@@ -17,11 +17,23 @@ module ApiHelpers
   end
 
   def parse_data(response)
+    return nil unless has_data?(response)
+
     begin
-      JSON.parse(response.body)
+      json_response = JSON.parse(response.body)
+      if json_response.present?
+        if response.code == GOOD_RESPONSE
+          return json_response
+        elsif json_response["error"].present?
+          @error = json_response["error"]
+        elsif json_response["code"].present?
+          @error = get_error_message(response.code, json_response["code"])
+        else
+          @error = DEFAULT_ERR
+        end
+      end
     rescue => e
       Rails.logger.error "Failed to parse JSON return from Buffer: #{e}"
-      nil
     end
   end
 
@@ -39,9 +51,7 @@ module ApiHelpers
     req = Net::HTTP::Get.new(uri)
     response = http.request(req)
 
-    if has_data?(response)
-      parse_data(response)
-    end
+    parse_data(response)
   end
 
   def get_post_response(uri, post_data)
@@ -52,20 +62,7 @@ module ApiHelpers
     req.body = post_data
     response = http.request(req)
 
-    if has_data?(response)
-      json_response = parse_data(response)
-      if json_response.present?
-        if response.code == GOOD_RESPONSE
-          return json_response["access_token"]
-        elsif json_response["error"].present?
-          @error = json_response["error"]
-        elsif json_response["error_code"].present?
-          @error = get_error_message(response.code, json_response["error_code"])
-        else
-          @error = DEFAULT_ERR
-        end
-      end
-    end
+    parse_data(response)
   end
 
   def get_error_message(http_code, error_code)

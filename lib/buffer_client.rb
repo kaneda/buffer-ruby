@@ -1,5 +1,3 @@
-require "net/http"
-require "uri"
 require_relative "api/auth_api.rb"
 require_relative "api/user_api.rb"
 require_relative "api/profile_api.rb"
@@ -16,9 +14,9 @@ class BufferClient
 
   # Reconfigure API objects
   def configure(options = {})
-    @auth_api    = AuthApi.configure(options)
-    @user_api    = UserApi.configure(options)
-    @profile_api = ProfileApi.configure(options)
+    @auth_api.configure(options)
+    @user_api.configure(options)
+    @profile_api.configure(options)
   end
 
   def has_error?
