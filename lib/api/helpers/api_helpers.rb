@@ -16,6 +16,16 @@ module ApiHelpers
     response.present? && response.body.present?
   end
 
+  def set_err(json_response)
+    if json_response["error"].present?
+      @error = json_response["error"]
+    elsif json_response["code"].present?
+      @error = get_error_message(response.code, json_response["code"])
+    else
+      @error = DEFAULT_ERR
+    end
+  end
+
   def parse_data(response)
     return nil unless has_data?(response)
 
@@ -24,12 +34,8 @@ module ApiHelpers
       if json_response.present?
         if response.code == GOOD_RESPONSE
           return json_response
-        elsif json_response["error"].present?
-          @error = json_response["error"]
-        elsif json_response["code"].present?
-          @error = get_error_message(response.code, json_response["code"])
         else
-          @error = DEFAULT_ERR
+          set_err(json_response)
         end
       end
     rescue => e
@@ -37,16 +43,17 @@ module ApiHelpers
     end
   end
 
-  def get_http_obj(uri)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
+  def get_http_obj(url)
+    uri              = URI.parse(url)
+    http             = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl     = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-    http
+    [ uri, http ]
   end
 
-  def get_get_response(uri)
-    http = get_http_obj(uri)
+  def get_get_response(url)
+    uri, http = get_http_obj(uri)
 
     req = Net::HTTP::Get.new(uri)
     response = http.request(req)
@@ -54,8 +61,8 @@ module ApiHelpers
     parse_data(response)
   end
 
-  def get_post_response(uri, post_data)
-    http = get_http_obj(uri)
+  def get_post_response(url, post_data)
+    uri, http = get_http_obj(uri)
 
     req = Net::HTTP::Post.new(uri)
     req.content_type = "application/x-www-form-urlencoded"

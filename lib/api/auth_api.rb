@@ -9,7 +9,6 @@ class AuthApi < BaseApi
     return nil unless verify_user_code && verify_env_vars
 
     oauth_url = "#{API_URL}/#{API_VERSION}/#{OAUTH_PATH}"
-    uri = URI.parse(oauth_url)
 
     post_data = "client_id=#{ENV['BUFFER_KEY']}&" +
       "client_secret=#{ENV['BUFFER_SECRET']}&" +
@@ -17,7 +16,7 @@ class AuthApi < BaseApi
       "code=#{@user_code}&" +
       "grant_type=authorization_code"
 
-    json_response = get_post_response(uri, post_data)
+    json_response = get_post_response(oauth_url, post_data)
     if json_response.present? && json_response["access_token"].present?
       json_response["access_token"]
     else

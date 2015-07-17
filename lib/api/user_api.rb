@@ -13,8 +13,6 @@ class UserApi < BaseApi
     return nil unless verify_token
 
     user_url = "#{API_URL}/#{API_VERSION}/#{USER_PATH}?access_token=#{@auth_token}"
-    uri = URI.parse(user_url)
-
-    get_get_response(uri)
+    get_get_response(user_url)
   end
 end
