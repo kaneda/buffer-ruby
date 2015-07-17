@@ -14,20 +14,27 @@ class BufferClient
     @profile_api = ProfileApi.new(options)
   end
 
+  # Reconfigure API objects
+  def configure(options = {})
+    @auth_api    = AuthApi.configure(options)
+    @user_api    = UserApi.configure(options)
+    @profile_api = ProfileApi.configure(options)
+  end
+
   def error
     @error
   end
 
   def get_auth_token
-    AuthApi.get_auth_token
+    @auth_api.get_auth_token
   end
 
   def get_user_id
-    UserApi.get_user_id
+    @user_api.get_user_id
   end
 
   def get_user_json
-    UserApi.get_user_json
+    @profile_api.get_user_json
   end
 
   def get_user_profiles
