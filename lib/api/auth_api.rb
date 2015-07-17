@@ -1,3 +1,5 @@
+require_relative 'base_api.rb'
+
 class AuthApi < BaseApi
 
   # PATHS
