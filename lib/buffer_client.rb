@@ -21,12 +21,24 @@ class BufferClient
     @profile_api = ProfileApi.configure(options)
   end
 
+  def has_error?
+    @error.present?
+  end
+
+  def get_error
+    tmp_error = @error
+    @error = nil
+    tmp_error
+  end
+
   def error
     @error
   end
 
   def get_auth_token
-    @auth_api.get_auth_token
+    token = @auth_api.get_auth_token
+    if @auth_api.has_error?
+
   end
 
   def get_user_id

@@ -21,6 +21,16 @@ class BaseApi
     @logger     = options[:logger] if options[:logger]
   end
 
+  def has_error?
+    @error.present?
+  end
+
+  def get_error
+    tmp_error = @error
+    @error = nil
+    tmp_error
+  end
+
   def error
     @error
   end
