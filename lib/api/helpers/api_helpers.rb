@@ -38,12 +38,12 @@ module ApiHelpers
     response.present? && response.body.present?
   end
 
-  def set_err(json_response)
+  def set_err(response_code, json_response)
     if json_response.present?
       if json_response["error"].present?
         @error = json_response["error"]
       elsif json_response["code"].present?
-        @error = get_error_message(response.code, json_response["code"])
+        @error = get_error_message(response_code, json_response["code"])
       else
         @error = DEFAULT_ERR
       end
@@ -58,13 +58,15 @@ module ApiHelpers
     begin
       json_response = JSON.parse(response.body)
     rescue => e
-      Rails.logger.error "Failed to parse JSON return from Buffer: #{e}"
+      msg = "Failed to parse JSON return from Buffer: #{e}"
+      log_or_print msg
+      @error = msg
     end
 
-    if response.code == GOOD_RESPONSE
+    if response.code == GOOD_RESPONSE || json_response.nil?
       return json_response
     else
-      set_err(json_response)
+      set_err(response.code, json_response)
     end
   end
 

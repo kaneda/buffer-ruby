@@ -82,6 +82,13 @@ class BufferClient
     user_json
   end
 
+  def deauthorize
+    success_json = @user_api.deauthorize
+    record_err(@user_api)
+
+    is_success?(success_json)
+  end
+
   ###############
   # PROFILE API #
   ###############
@@ -108,6 +115,7 @@ class BufferClient
   end
 
   def update_schedule(id, sched_array)
+    sched_array.deep_symbolize_keys!
     success_json = @profile_api.update_schedule(id, sched_array)
     record_err(@profile_api)
 
@@ -153,7 +161,14 @@ class BufferClient
     new_order_json = @update_api.reorder_updates(id, updates_array, options)
     record_err(@update_api)
 
-    new_order_json
+    extract_key(new_order_json, "updates")
+  end
+
+  def shuffle_updates(id, options = {})
+    shuffle_json = @update_api.shuffle_updates(id, options)
+    record_err(@update_api)
+
+    extract_key(shuffle_json, "updates")
   end
 
   def create_update(profile_ids, options = {})
@@ -228,5 +243,9 @@ class BufferClient
 
   def record_err(api)
     @error = api.get_error if api.has_error?
+  end
+
+  def extract_key(json, key)
+    return json[key] if json.present?
   end
 end
