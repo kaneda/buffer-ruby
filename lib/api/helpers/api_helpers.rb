@@ -71,7 +71,9 @@ module ApiHelpers
   end
 
   def get_http_obj(url)
-    uri              = URI.parse(url)
+    uri = URI.parse(url)
+    raise URI::InvalidURIError if uri.host.nil?
+
     http             = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl     = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
@@ -82,7 +84,12 @@ module ApiHelpers
   def get_get_response(url)
     uri, http = get_http_obj(url)
 
-    req = Net::HTTP::Get.new(uri)
+    req = begin
+      Net::HTTP::Get.new(uri)
+    rescue
+      # Fall back in case of Ruby 1.9.3
+      Net::HTTP::Get.new(uri.request_uri)
+    end
     response = http.request(req)
 
     parse_data(response)
@@ -91,7 +98,12 @@ module ApiHelpers
   def get_post_response(url, post_data = "")
     uri, http = get_http_obj(url)
 
-    req = Net::HTTP::Post.new(uri)
+    req = begin
+      Net::HTTP::Post.new(uri)
+    rescue
+      # Fall back in case of Ruby 1.9.3
+      Net::HTTP::Post.new(uri.request_uri)
+    end
     req.content_type = "application/x-www-form-urlencoded"
     req.body = post_data
     response = http.request(req)

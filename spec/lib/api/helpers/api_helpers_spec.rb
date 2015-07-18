@@ -11,7 +11,12 @@ describe ApiHelpers do
     }
   end
 
+  let(:good_hash) { options }
+
   let(:err) { "An error" }
+  let(:good_url) { "http://jbegleiter.com" }
+  let(:bad_json) { '{"foo": "bar"' }
+  let(:good_json) { "#{bad_json} }" }
 
   describe "#build_options_string" do
     let(:path_regex) do
@@ -50,7 +55,6 @@ describe ApiHelpers do
 
   describe "#set_err" do
     let(:response_code) { "403" }
-    let(:err) { "An error" }
     let(:err_2) { "A second err" }
     let(:json_with_error) { { "error" => err } }
     let(:json_with_code) { { "code" => "1001" } }
@@ -93,13 +97,11 @@ describe ApiHelpers do
   end
 
   describe "#parse_data" do
-    let(:bad_json) { '{"foo": "bar"' }
     let(:bad_json_err) { "Failed to parse JSON return from Buffer" }
     let(:bad_response) do
       ActionDispatch::Response.new(403, {}, bad_json)
     end
 
-    let(:good_json) { "#{bad_json} }" }
     let(:good_response) do
       ActionDispatch::Response.new(200, {}, good_json)
     end
@@ -132,6 +134,67 @@ describe ApiHelpers do
 
     it "returns the default error when the error code is unknown" do
       expect(base_api.get_error_message(http_code, "10101")).to eq(ApiHelpers::DEFAULT_ERR)
+    end
+  end
+
+  describe "#get_http_obj" do
+    let(:bad_url) { "foo" }
+
+    it "raises an error when passed an invalid URL" do
+      expect { base_api.get_http_obj(bad_url) }.to raise_error
+    end
+
+    it "returns an array of URI, HTTP object when passed a valid URL" do
+      uri, http = base_api.get_http_obj(good_url)
+      expect(uri).to be_present
+      expect(http).to be_present
+    end
+  end
+
+  # Test that these don't blow up keeping in mind that
+  # get_http_obj and parse_data are tested above
+  describe "#get_functions" do
+    before(:each) do
+      # Stubbed, as this is tested above
+      allow_any_instance_of(BaseApi).to receive(:parse_data).and_return(good_hash)
+
+      # Since we're stubbing parse it doesn't matter what this returns
+      allow_any_instance_of(Net::HTTP).to receive(:request).and_return({})
+    end
+
+    describe "#get_post_response" do
+      let(:post_data) { "foo=bar&boz=bot" }
+
+      it "doesn't explode when post data is set" do
+        expect(base_api.get_post_response(good_url, post_data)).to eq(good_hash)
+      end
+
+      it "doesn't explode when post data isn't set" do
+        expect(base_api.get_post_response(good_url)).to eq(good_hash)
+      end
+    end
+
+    describe "#get_get_response" do
+      it "doesn't explode" do
+        expect(base_api.get_get_response(good_url)).to eq(good_hash)
+      end
+    end
+  end
+
+  describe "#log_or_print" do
+    let(:msg) { "A message" }
+    let(:log_level) { "info" }
+
+    it "prints to the logger when logger is defined" do
+      logger = Logger.new(STDOUT)
+      base_api.instance_variable_set(:@logger, logger)
+
+      expect(logger).to receive(:send).with(log_level, msg)
+      base_api.log_or_print(msg, log_level)
+    end
+
+    it "prints to STDOUT when logger is not defined" do
+      expect { base_api.log_or_print(msg, log_level) }.to output(/#{msg}(\n)?/).to_stdout
     end
   end
 end
