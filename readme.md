@@ -3,6 +3,7 @@
 Modelled after Octokit <3. This is a lightweight client for the Buffer API (https://buffer.com/developers/api), which is intended to return JSON as opposed to objects.
 
 [![Code Climate](https://codeclimate.com/github/kaneda/buffer-ruby/badges/gpa.svg)](https://codeclimate.com/github/kaneda/buffer-ruby)
+[![Test Coverage](https://codeclimate.com/github/kaneda/buffer-ruby/badges/coverage.svg)](https://codeclimate.com/github/kaneda/buffer-ruby/coverage)
 
 ## Client API
 
