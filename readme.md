@@ -6,6 +6,12 @@ Modelled after [Octokit](https://github.com/octokit/octokit.rb) <3, this is a li
 [![Test Coverage](https://codeclimate.com/github/kaneda/buffer-ruby/badges/coverage.svg)](https://codeclimate.com/github/kaneda/buffer-ruby/coverage)
 [![Build Status](https://travis-ci.org/kaneda/buffer-ruby.svg?branch=master)](https://travis-ci.org/kaneda/buffer-ruby)
 
+## Ruby Versions
+
+This gem is built to work with Ruby 1.9.3+
+
+See the Travis-CI build information above for build status on 1.9.3 and 2.1.2
+
 ## Client API
 
 ### What's Imlemented?
