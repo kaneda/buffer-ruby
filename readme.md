@@ -30,7 +30,7 @@ See the Travis-CI build information above for build status on 1.9.3 and 2.1.2
 Put this sucker in your Gemfile and bundle install
 
 ```ruby
-gem "buffer-app", :git => "git://github.com/kaneda/buffer-ruby", :tag => "v1.1"
+gem "buffer-app", :git => "git://github.com/kaneda/buffer-ruby", :tag => "v1.2"
 ```
 
 Then drop this into your config/application.rb (or wherever you want to use it)
