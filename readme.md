@@ -10,12 +10,12 @@ Modelled after [Octokit](https://github.com/octokit/octokit.rb) <3, this is a li
 
 * [Ruby Versions](https://github.com/kaneda/buffer-ruby#ruby-versions)
 * [Client API](https://github.com/kaneda/buffer-ruby#client-api)
-** [What's Implemented](https://github.com/kaneda/buffer-ruby#whats-imlemented)
-** [Installing](https://github.com/kaneda/buffer-ruby#installing)
-** [Basic Usage](https://github.com/kaneda/buffer-ruby#basic-usage)
-** [Available Calls](https://github.com/kaneda/buffer-ruby#available-calls)
-** [Helper Methods](https://github.com/kaneda/buffer-ruby#helper-methods)
-** [Defining a Schedule](https://github.com/kaneda/buffer-ruby#defining-a-schedule)
+  * [What's Implemented](https://github.com/kaneda/buffer-ruby#whats-imlemented)
+  * [Installing](https://github.com/kaneda/buffer-ruby#installing)
+  * [Basic Usage](https://github.com/kaneda/buffer-ruby#basic-usage)
+  * [Available Calls](https://github.com/kaneda/buffer-ruby#available-calls)
+  * [Helper Methods](https://github.com/kaneda/buffer-ruby#helper-methods)
+  * [Defining a Schedule](https://github.com/kaneda/buffer-ruby#defining-a-schedule)
 * [Contributing](https://github.com/kaneda/buffer-ruby#contributing)
 * [Contact](https://github.com/kaneda/buffer-ruby#contact)
 
