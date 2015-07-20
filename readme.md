@@ -6,6 +6,19 @@ Modelled after [Octokit](https://github.com/octokit/octokit.rb) <3, this is a li
 [![Test Coverage](https://codeclimate.com/github/kaneda/buffer-ruby/badges/coverage.svg)](https://codeclimate.com/github/kaneda/buffer-ruby/coverage)
 [![Build Status](https://travis-ci.org/kaneda/buffer-ruby.svg?branch=master)](https://travis-ci.org/kaneda/buffer-ruby)
 
+## Table of Contents
+
+* [Ruby Versions](https://github.com/kaneda/buffer-ruby#ruby-versions)
+* [Client API](https://github.com/kaneda/buffer-ruby#client-api)
+** [What's Implemented](https://github.com/kaneda/buffer-ruby#whats-imlemented)
+** [Installing](https://github.com/kaneda/buffer-ruby#installing)
+** [Basic Usage](https://github.com/kaneda/buffer-ruby#basic-usage)
+** [Available Calls](https://github.com/kaneda/buffer-ruby#available-calls)
+** [Helper Methods](https://github.com/kaneda/buffer-ruby#helper-methods)
+** [Defining a Schedule](https://github.com/kaneda/buffer-ruby#defining-a-schedule)
+* [Contributing](https://github.com/kaneda/buffer-ruby#contributing)
+* [Contact](https://github.com/kaneda/buffer-ruby#contact)
+
 ## Ruby Versions
 
 This gem is built to work with Ruby 1.9.3+
@@ -56,6 +69,8 @@ auth_tok = buffer_client.get_auth_token
 buffer_client.configure({
   :auth_token => auth_tok
 })
+
+# Subsequent calls here (see below)
 ```
 
 ### Available Calls
@@ -84,7 +99,7 @@ buffer_client.configure({
 | [get_shares](https://buffer.com/developers/api/links#shares) | Unencodded URL:String | Shares:Integer | You can pass a normal URL here, the client will encode it. This is one of the only calls to not require an auth_token |
 | [get_configuration](https://buffer.com/developers/api/info#configuration) | | Configuration:Hash | "services" key has internal keys for each service |
 
-### Helper methods
+### Helper Methods
 | Method | Description |
 | :---------: | :----- |
 | configure | Takes in a hash (as above) and reconfigures all API objects |
@@ -93,7 +108,7 @@ buffer_client.configure({
 | error | Returns the current error, leaving it in tact |
 
 
-### Defining a schedule
+### Defining a Schedule
 
 To update a schedule the BufferClient is expecting a schedule of the form:
 
@@ -110,6 +125,7 @@ To update a schedule the BufferClient is expecting a schedule of the form:
 ```
 
 Note that you can make the keys symbols or strings, the client will accept either one.
+
 ## Contributing
 
 To contribute simply:
@@ -120,7 +136,7 @@ To contribute simply:
 4. Once approved [squash your commits](http://davidwalsh.name/squash-commits-git)
 5. Party
 
-## Contact
+## Contact Me
 
 Email: kanedasan@gmail.com
 
